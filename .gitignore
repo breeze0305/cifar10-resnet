@@ -1,0 +1,14 @@
+train/
+
+weight/
+
+val/
+
+cifar-10-batches-py/
+
+__pycache__/
+
+wandb/
+
+test.py
+util.py
