@@ -2,7 +2,7 @@ import torch
 import wandb
 import torchvision.models as models
 
-from torchvision.models.resnet import ResNet50_Weights
+from torchvision.models.resnet import ResNet50_Weights, ResNet18_Weights
 from tqdm import tqdm
 from torch.utils.data import DataLoader
 
@@ -11,7 +11,7 @@ from main_dataset import Cifar10Dataset
 
 def get_arg():
     arg = {
-        "batch_size" : 512,
+        "batch_size" : 1024,
         "lr" : 0.001,
         "epoch" : 100,
         "device" : get_device(),
@@ -40,7 +40,8 @@ def main(arg: dict):
     test_datalooader = DataLoader(test_dataset, batch_size=arg["batch_size"], shuffle=False, 
                                     pin_memory=True, num_workers=arg["number_worker"])
     
-    model = models.resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
+    # model = models.resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
+    model = models.resnet18(weights=ResNet18_Weights.IMAGENET1K_V1)
     model.to(arg["device"])
     
     critirien = torch.nn.CrossEntropyLoss()
@@ -84,7 +85,7 @@ def main(arg: dict):
             test_loss = 0.0
             
             with torch.no_grad():
-                for i, (image, label) in tqdm(enumerate(test_datalooader),desc=f"test epoch: {epoch}"):
+                for i, (image, label) in enumerate(tqdm(test_datalooader,desc=f"test epoch: {epoch}")):
                     image = image.to(arg["device"])
                     label = label.to(arg["device"])
                     
